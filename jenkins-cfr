@@ -9,14 +9,6 @@ pipeline {
         stage("Build Preparation") {
             steps {
                 script{
-                	strBranch = env.GIT_BRANCH
-                    strTrTkt = strBranch.split('-')[2] + "-" + strBranch.split('-')[3] 
-                    TRACKING_TKT = "${strTrTkt}"
-                    if ("$env.PREV_TRACKING_TKT" == '') { 
-                        strPrevTrTkt = "${TRACKING_TKT}"  
-                    } else {
-                        strPrevTrTkt = "${PREV_TRACKING_TKT}"  
-                    }
                     DeployableJobs = sh (
                        script: '''
                          TRACKING_TKT=$(echo $GIT_BRANCH| cut -d'-' -f 3)'-'$(echo $GIT_BRANCH| cut -d'-' -f 4)
@@ -38,25 +30,25 @@ pipeline {
                 dir("$env.WORKSPACE/MIAM-Repo") {
                     if (DeployableJobList.contains('QA_BTrack_MIAM_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_Authorization_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_User_Management_UI_Deployment_Pipeline_Job')) {
                         echo 'sending project-a'
-                        publishEvent(event:jsonEvent('{"event":"project-a":"this is a project-a build job"}'),verbose: true)
+                        publishEvent(event:jsonEvent('{"event":"project-a"}'),verbose: true)
                     }
                 }
                 dir("$env.WORKSPACE/MIAM-UI-Repo") { 
                     if (DeployableJobList.contains('QA_BTrack_MIAM_UI_Deployment_Pipeline_Job')) {
                         echo 'sending project-b'
-                        publishEvent(event:jsonEvent('{"event":"project-b":"this is a project-b job"}'),verbose: true)  
+                        publishEvent(event:jsonEvent('{"event":"project-b"}'),verbose: true)  
                     }         	
                 }
                 dir("$env.WORKSPACE/BTS-CMS-Repo") {
                     if (DeployableJobList.contains('QA_BTrack_CMS_Deployment_Pipeline_Job')) {
                         echo 'sending project-c'
-                        publishEvent(event:jsonEvent('{"event":"project-c":"This is a project-c build"}'),verbose: true)
+                        publishEvent(event:jsonEvent('{"event":"project-c"}'),verbose: true)
                     }	
                 }
                 dir("$env.WORKSPACE/BTrackAdpRepo") {
                     if (DeployableJobList.contains('QA_BTrack_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Clientline_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Notification_Adapters_Group_Deployment_Pipeline_Job')) {
                          echo 'sending project-d'
-                        publishEvent(event:jsonEvent('{"event":"project-d":"This is a project-d build"}'),verbose: true)
+                        publishEvent(event:jsonEvent('{"event":"project-d"}'),verbose: true)
                     }	
                 }   
             }
