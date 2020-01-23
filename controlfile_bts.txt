@@ -1,13 +1,14 @@
-TCB-20123 QA:QA_TCB_Cesar_UI_Deployment_Pipeline_Job:TRUE
-TCB-20123 QA:QA_TCB_Darin_UI_Deployment_Pipeline_Job:TRUE
-TCB-20123 QA:QA_TCB_Jason_UI_Deployment_Pipeline_Job:TRUE
-TCB-20123 QA:QA_TCB_Grig_UI_Deployment_Pipeline_Job:TRUE
-TCB-20123 QA:QA_TCB_Justin_UI_Deployment_Pipeline_Job:TRUE
-TCB-20123 QA:QA_TCB_Ted_UI_Deployment_Pipeline_Job:TRUE
-TCB-20123 QA:QA_TCB_Java_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_MIAM_API_Services_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_MIAM_User_Management_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_MIAM_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_CMS_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_Adapters_Group_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_Clientline_Adapters_Group_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_BTrack_Notification_Adapters_Group_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_Kathleen_Services_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_Services_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_UI_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_Tina_UI_Deployment_Pipeline_Job:TRUE
+
 
 
