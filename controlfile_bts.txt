@@ -9,6 +9,3 @@ TCB-20123 QA:QA_TCB_Kathleen_Services_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_Services_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_UI_Deployment_Pipeline_Job:TRUE
 TCB-20123 QA:QA_TCB_Tina_UI_Deployment_Pipeline_Job:TRUE
-
-
-
