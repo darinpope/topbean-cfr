@@ -13,7 +13,7 @@ spec:
     command:
     - cat
     tty: true
-      """
+"""
     }
   }
   stages {
@@ -21,7 +21,7 @@ spec:
       steps {
         container("centos") {
           sh """
-            awk -F : '{print $2}' controlfile_bts.txt
+            awk -F : "{print $2}" controlfile_bts.txt
           """
         }
       }
