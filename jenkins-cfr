@@ -71,15 +71,15 @@ pipeline {
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdmiam.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
                         }
                     echo 'sending miam-build'
-                    publishEvent(event:jsonEvent('{"event":"miam-build":"this is a miam build"}'),verbose: true)
+                    publishEvent(event:jsonEvent('{"event":"miam-build":"this is a miam build job"}'),verbose: true)
                 }
                 dir("$env.WORKSPACE/MIAM-UI-Repo") {
                     script {   
                         if (DeployableJobList.contains('QA_BTrack_MIAM_UI_Deployment_Pipeline_Job')) {
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdmiam-ui.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
                         } 
-                    echo 'sending helloWorld1'
-                    publishEvent(event:jsonEvent('{"event":"helloWorld1","myCoolKey":"This is my cool value for helloWorld1"}'),verbose: true)     
+                    echo 'sending miam-ui'
+                    publishEvent(event:jsonEvent('{"event":"miam-ui":"this is a miam-ui job"}'),verbose: true)     
                     }	
                 }
                 dir("$env.WORKSPACE/BTS-CMS-Repo") {
@@ -87,8 +87,8 @@ pipeline {
                         if (DeployableJobList.contains('QA_BTrack_CMS_Deployment_Pipeline_Job')) {
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdbusinesstrackcms.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
                         }
-                    echo 'sending helloWorld1'
-                    publishEvent(event:jsonEvent('{"event":"helloWorld1","myCoolKey":"This is my cool value for helloWorld1"}'),verbose: true)    
+                    echo 'sending bts-cms'
+                    publishEvent(event:jsonEvent('{"event":"bts-cms":"This is a bts-cms buikd"}'),verbose: true)    
                     }	
                 }
                 dir("$env.WORKSPACE/BTrackAdpRepo") {
@@ -104,8 +104,8 @@ pipeline {
 								cp -r $WORKSPACE/BTrackAdpRepo/* $WORKSPACE/Ntf_Adp_Grp/
 							'''
                         }
-                    echo 'sending helloWorld1'
-                    publishEvent(event:jsonEvent('{"event":"helloWorld1","myCoolKey":"This is my cool value for helloWorld1"}'),verbose: true) 	
+                    echo 'sending btrack-adp'
+                    publishEvent(event:jsonEvent('{"event":"btrack-adp":"This is a btrack-adp build"}'),verbose: true) 	
                     }	
                 }   
             }
