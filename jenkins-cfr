@@ -1,66 +1,40 @@
 pipeline {
-    agent { label 'build' }
-   ###no need for tools 
-    tools { 
-        maven 'MAVEN_HOME'
-      
+    agent {
+    kubernetes {
+      label 'buildprep'
+      yamlFile 'kubernetespod.yaml'
     }
-   
+  }
     stages {
-    
         stage("Build Preparation") {
-        
-            when { 
-                expression{env.SKIP_BUILDANDUPLOAD == 'NO'}
-### don't use env unless needed/other method if possible 
-            }
-     
             steps {
-         
-		 ### using single are litteral - does not resolve vars inside of single quotes.
                 sh  '''
-                    mkdir -p $WORKSPACE/BTrackAdpRepo
-                                                         
+                    mkdir -p $WORKSPACE/BTrackAdpRepo                                      
                     mkdir -p $WORKSPACE/MIAM-Repo
-
                     mkdir -p $WORKSPACE/MIAM-UI-Repo
                     if [ -d $WORKSPACE/MIAM-UI-Repo/.ebextensions ]
                     then
                         rm -rf $WORKSPACE/MIAM-UI-Repo/.ebextensions 
                     fi
-                    
                     mkdir -p $WORKSPACE/BTS-CMS-Repo
-
-                '''
-                
+                '''             
                 script{
-                        
-                
                 	strBranch = env.GIT_BRANCH
                     strTrTkt = strBranch.split('-')[2] + "-" + strBranch.split('-')[3] 
                     TRACKING_TKT = "${strTrTkt}"
-       ### use env var  TRACKING_TKT
-	   ### move to a custom step  
-                    if ("$env.PREV_TRACKING_TKT" == '') {
-                       
-                        strPrevTrTkt = "${TRACKING_TKT}"
-                       
+                    if ("$env.PREV_TRACKING_TKT" == '') { 
+                        strPrevTrTkt = "${TRACKING_TKT}"  
                     } else {
-                       
-                        strPrevTrTkt = "${PREV_TRACKING_TKT}"
-                           
+                        strPrevTrTkt = "${PREV_TRACKING_TKT}"  
                     }
-					
                     /*
                     build job: 'FDC_Release/xGet_Repo_Information' , parameters: 
                          [[$class: 'StringParameterValue', name: 'CRNT_TRACKING_TKT', value: "$TRACKING_TKT"],
                          [$class: 'StringParameterValue', name: 'PREV_TRACKING_TKT', value: "$strPrevTrTkt"],
                          [$class: 'StringParameterValue', name: 'ENV', value: "QA"],
                          [$class: 'StringParameterValue', name: 'PROJ_PL_DIRN', value: "BTS"],
-                         [$class: 'StringParameterValue', name: 'PROJ_NAME', value: "BTS"]]
-                         
+                         [$class: 'StringParameterValue', name: 'PROJ_NAME', value: "BTS"]            
                    */
-                    
                     triggerRemoteJob mode: [$class: 'AwaitResult', timeout: [timeoutStr: '1d'], whenFailure: [$class: 'StopAsFailure'], 
                     whenTimeout: [$class: 'StopAsFailure'], whenUnstable: [$class: 'StopAsFailure']], 
                     parameterFactories: [[$class: 'SimpleString', name: 'CRNT_TRACKING_TKT', value: "$TRACKING_TKT"],
@@ -70,13 +44,10 @@ pipeline {
                          [$class: 'SimpleString', name: 'PROJ_NAME', value: "BTS"]], 
                     remotePathMissing: [$class: 'StopAsFailure'], 
                     remotePathUrl: 'jenkins://ca27ab87a185c26e1d28ce25e5634f51/FDC_Release/xGet_Repo_Information'
-                   ### does it really need to stop- CTC maybe? Custom step? 
-                    
                     DeployableJobs = sh (
                        script: '''
-                         
                          TRACKING_TKT=$(echo $GIT_BRANCH| cut -d'-' -f 3)'-'$(echo $GIT_BRANCH| cut -d'-' -f 4)
-                         file="/opt/jenkins/pipeline/Pipeline-Job-Controller_List_BTS.txt"
+                         file="./controlfile_bts.txt"
 						 ### SCM
                          cat $file | while read line
                          do
@@ -86,91 +57,59 @@ pipeline {
                                 echo ${rhs%% *}
                             fi
                          done
-                         
                          ''',
                         returnStdout: true
                     ).trim()
-                    ### running on master
                     DeployableJobList = DeployableJobs.split(',')
                     echo "Deployable Job List: ${DeployableJobList}"
                 }
-
-                
                 dir("$env.WORKSPACE/MIAM-Repo") {
                     script {
-                    
                         if (DeployableJobList.contains('QA_BTrack_MIAM_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_Authorization_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_User_Management_UI_Deployment_Pipeline_Job')) {
-                        
                             strFullBranch = env.GIT_BRANCH
                             strOnlyBranch = strFullBranch.split('/')[1] 
-                   
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdmiam.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
-                        ### why diff repo??
                         }
-                    
-                    }
-					
+                    echo 'sending miam-build'
+                    publishEvent(event:jsonEvent('{"event":"miam-build":"this is a miam build"}'),verbose: true)
                 }
-                
                 dir("$env.WORKSPACE/MIAM-UI-Repo") {
-                    script {
-                    
+                    script {   
                         if (DeployableJobList.contains('QA_BTrack_MIAM_UI_Deployment_Pipeline_Job')) {
-                        
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdmiam-ui.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
-                        
-                        }
-                           
-                    }
-					
+                        } 
+                    echo 'sending helloWorld1'
+                    publishEvent(event:jsonEvent('{"event":"helloWorld1","myCoolKey":"This is my cool value for helloWorld1"}'),verbose: true)     
+                    }	
                 }
-                
                 dir("$env.WORKSPACE/BTS-CMS-Repo") {
                     script {
-                    
                         if (DeployableJobList.contains('QA_BTrack_CMS_Deployment_Pipeline_Job')) {
-                        
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdbusinesstrackcms.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
-                        
                         }
-    
-                    }
-					
+                    echo 'sending helloWorld1'
+                    publishEvent(event:jsonEvent('{"event":"helloWorld1","myCoolKey":"This is my cool value for helloWorld1"}'),verbose: true)    
+                    }	
                 }
-                
                 dir("$env.WORKSPACE/BTrackAdpRepo") {
                     script {
-                    
                         if (DeployableJobList.contains('QA_BTrack_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Clientline_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Notification_Adapters_Group_Deployment_Pipeline_Job')) {
-                        
                             git branch: "${strOnlyBranch}", url: 'git@bitbucket.org:firstdatacorp/fdbt-eai.git' , credentialsId: '09d9e8f0-0ae0-4af2-987a-aeacfdd0354b'
-                        
                             sh  '''
-                    
 								mkdir -p $WORKSPACE/Btrk_Adp_Grp
 								cp -r $WORKSPACE/BTrackAdpRepo/* $WORKSPACE/Btrk_Adp_Grp/
-
 								mkdir -p $WORKSPACE/Clnt_Adp_Grp
 								cp -r $WORKSPACE/BTrackAdpRepo/* $WORKSPACE/Clnt_Adp_Grp/
-
-
 								mkdir -p $WORKSPACE/Ntf_Adp_Grp
 								cp -r $WORKSPACE/BTrackAdpRepo/* $WORKSPACE/Ntf_Adp_Grp/
-
 							'''
-                        
-                        } 
-						
-                    }
-					
-                }
-                
+                        }
+                    echo 'sending helloWorld1'
+                    publishEvent(event:jsonEvent('{"event":"helloWorld1","myCoolKey":"This is my cool value for helloWorld1"}'),verbose: true) 	
+                    }	
+                }   
             }
-        
         }
-        
-        stage("Build") {
-            when { 
-                expression{env.SKIP_BUILDANDUPLOAD == 'NO'}
 
-            }
+    }
+}
