@@ -2,7 +2,17 @@ pipeline {
   agent{
     kubernetes {
       label 'cfr-dpope'
-      yamlFile 'kubernetespod.yaml'
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: alpine-zip
+    image: kramos/alpine-zip:latest
+    command:
+    - cat
+    tty: true
+      """
     }
   }
   stages {
