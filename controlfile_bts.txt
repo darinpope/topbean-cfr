@@ -1,20 +1,13 @@
-FDMP-26028 QA:QA_BAMS_Marketplace_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_CFI_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Canada_Services_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Canada_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_GSA_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Herbalife_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_ICS_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_ISO_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Jobs_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Oklahoma_Bank_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Salesforce_Services_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Services_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Services_MerchantStatus_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_Services_Workers_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_FDMP_ZionsBank_UI_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_KeyBank_Marketplace_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_PNC_Marketplace_Deployment_Pipeline_Job:TRUE
-FDMP-26028 QA:QA_TD_Marketplace_Proxy_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Cesar_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Darin_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Jason_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Grig_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Justin_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Ted_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Java_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Kathleen_Services_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Services_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_UI_Deployment_Pipeline_Job:TRUE
+TCB-20123 QA:QA_TCB_Tina_UI_Deployment_Pipeline_Job:TRUE
+
 
