@@ -21,7 +21,7 @@ spec:
       steps {
         container("alpine-zip") {
           sh """
-            zip --version
+            cat controlfile_bts.txt
           """
         }
       }
