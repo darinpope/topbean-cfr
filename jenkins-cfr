@@ -1,3 +1,4 @@
+@Library("shared-starter") _
 pipeline {
     agent {
     kubernetes {
@@ -8,35 +9,8 @@ pipeline {
     stages {
         stage("Build Preparation") {
             steps {
-                script{
-                    DeployableJobs = sh (
-                       script: '''
-                            awk '{split(\$0,a,":"); print a[2]}' controlfile_bts.txt
-                        ''',
-                        returnStdout: true
-                    ).trim()
-                    DeployableJobList = DeployableJobs.split("\\r\\n|\\n|\\r")
-                    echo "Deployable Job List: ${DeployableJobList}"
-                    if (DeployableJobList.contains('QA_BTrack_MIAM_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_Authorization_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_User_Management_UI_Deployment_Pipeline_Job')) {
-                        echo 'sending project-a'
-                        publishEvent(event:jsonEvent('{"event":"project-a"}'),verbose: true)
-                    }
-                    if (DeployableJobList.contains('QA_BTrack_MIAM_UI_Deployment_Pipeline_Job')) {
-                        echo 'sending project-b'
-                        publishEvent(event:jsonEvent('{"event":"project-b"}'),verbose: true)  
-                    }         	
-                    if (DeployableJobList.contains('QA_BTrack_CMS_Deployment_Pipeline_Job')) {
-                        echo 'sending project-c'
-                        publishEvent(event:jsonEvent('{"event":"project-c"}'),verbose: true)
-                    }	
-                    if (DeployableJobList.contains('QA_BTrack_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Clientline_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Notification_Adapters_Group_Deployment_Pipeline_Job')) {
-                        echo 'sending project-d'
-                        publishEvent(event:jsonEvent('{"event":"project-d"}'),verbose: true)
-                    }	
-                    
-                }   
+                getProjectFromJob()
             }
         }
-
     }
 }
