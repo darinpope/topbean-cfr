@@ -21,7 +21,7 @@ spec:
       steps {
         container("centos") {
           sh """
-            awk '{split($0,a,":"); print a[2]}' controlfile_bts.txt
+            awk '{split(\$0,a,":"); print a[2]}' controlfile_bts.txt
           """
         }
       }
