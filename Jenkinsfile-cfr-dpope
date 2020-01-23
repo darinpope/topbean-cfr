@@ -21,7 +21,7 @@ spec:
       steps {
         container("centos") {
           sh """
-            awk '{split(\$0,a,":"); print a[2]}' controlfile_bts.txt
+            for jobname in \$(awk '{split(\$0,a,":"); print a[2]}' controlfile_bts.txt) ; do echo \$jobname ; done
           """
         }
       }
