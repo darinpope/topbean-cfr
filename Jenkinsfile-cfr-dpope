@@ -8,8 +8,8 @@ apiVersion: v1
 kind: Pod
 spec:
   containers:
-  - name: alpine-zip
-    image: kramos/alpine-zip:latest
+  - name: centos
+    image: centos:7
     command:
     - cat
     tty: true
@@ -19,9 +19,9 @@ spec:
   stages {
     stage("Build Prep") {
       steps {
-        container("alpine-zip") {
+        container("centos") {
           sh """
-            cat controlfile_bts.txt
+            awk -F : '{print $2}' controlfile_bts.txt
           """
         }
       }
