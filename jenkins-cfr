@@ -11,46 +11,29 @@ pipeline {
                 script{
                     DeployableJobs = sh (
                        script: '''
-                         TRACKING_TKT=$(echo $GIT_BRANCH| cut -d'-' -f 3)'-'$(echo $GIT_BRANCH| cut -d'-' -f 4)
-                         file="./controlfile_bts.txt"
-                         cat $file | while read line
-                         do
-                            if [[ $line == *BTS-CurrRUNJOBList-QA-${TRACKING_TKT},* ]]; 
-                            then 
-                                rhs=${line##*BTS-CurrRUNJOBList-QA-${TRACKING_TKT},}
-                                echo ${rhs%% *}
-                            fi
-                         done
-                         ''',
+                            awk '{split(\$0,a,":"); print a[2]}' controlfile_bts.txt
+                        ''',
                         returnStdout: true
                     ).trim()
-                    DeployableJobList = DeployableJobs.split(',')
+                    DeployableJobList = DeployableJobs.split("\\r\\n|\\n|\\r")
                     echo "Deployable Job List: ${DeployableJobList}"
-                
-                    dir("$env.WORKSPACE/MIAM-Repo") {
-                        if (DeployableJobList.contains('QA_BTrack_MIAM_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_Authorization_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_User_Management_UI_Deployment_Pipeline_Job')) {
-                            echo 'sending project-a'
-                            publishEvent(event:jsonEvent('{"event":"project-a"}'),verbose: true)
-                        }
+                    if (DeployableJobList.contains('QA_BTrack_MIAM_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_Authorization_API_Services_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_MIAM_User_Management_UI_Deployment_Pipeline_Job')) {
+                        echo 'sending project-a'
+                        publishEvent(event:jsonEvent('{"event":"project-a"}'),verbose: true)
                     }
-                    dir("$env.WORKSPACE/MIAM-UI-Repo") { 
-                        if (DeployableJobList.contains('QA_BTrack_MIAM_UI_Deployment_Pipeline_Job')) {
-                            echo 'sending project-b'
-                            publishEvent(event:jsonEvent('{"event":"project-b"}'),verbose: true)  
-                        }         	
-                    }
-                    dir("$env.WORKSPACE/BTS-CMS-Repo") {
-                        if (DeployableJobList.contains('QA_BTrack_CMS_Deployment_Pipeline_Job')) {
-                            echo 'sending project-c'
-                            publishEvent(event:jsonEvent('{"event":"project-c"}'),verbose: true)
-                        }	
-                    }
-                    dir("$env.WORKSPACE/BTrackAdpRepo") {
-                        if (DeployableJobList.contains('QA_BTrack_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Clientline_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Notification_Adapters_Group_Deployment_Pipeline_Job')) {
-                            echo 'sending project-d'
-                            publishEvent(event:jsonEvent('{"event":"project-d"}'),verbose: true)
-                        }	
-                    }
+                    if (DeployableJobList.contains('QA_BTrack_MIAM_UI_Deployment_Pipeline_Job')) {
+                        echo 'sending project-b'
+                        publishEvent(event:jsonEvent('{"event":"project-b"}'),verbose: true)  
+                    }         	
+                    if (DeployableJobList.contains('QA_BTrack_CMS_Deployment_Pipeline_Job')) {
+                        echo 'sending project-c'
+                        publishEvent(event:jsonEvent('{"event":"project-c"}'),verbose: true)
+                    }	
+                    if (DeployableJobList.contains('QA_BTrack_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Clientline_Adapters_Group_Deployment_Pipeline_Job') || DeployableJobList.contains('QA_BTrack_Notification_Adapters_Group_Deployment_Pipeline_Job')) {
+                        echo 'sending project-d'
+                        publishEvent(event:jsonEvent('{"event":"project-d"}'),verbose: true)
+                    }	
+                    
                 }   
             }
         }
