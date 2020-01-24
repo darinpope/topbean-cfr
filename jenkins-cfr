@@ -1,4 +1,4 @@
-@Library("shared-starter") _
+@Library("topbean-shared-library") _
 pipeline {
     agent {
     kubernetes {
